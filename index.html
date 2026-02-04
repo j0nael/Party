@@ -19,7 +19,7 @@
 <div id="bola-disco"></div>
 
 <!-- 🎶 MUSICA -->
-<audio id="musica" loop playsinline>
+<audio id="musica" loop>
     <source src="Audio/corre grea correElCherryScomRD.mp3" type="audio/mpeg">
 </audio>
 
@@ -69,61 +69,63 @@
     © 2026 | Evento Privado
 </footer>
 
-<!-- 🎧 DISCOTECA TOTAL (FIX iPhone + PC) -->
+<!-- 🎧 MODO DISCOTECA TOTAL -->
 <script>
 const musica = document.getElementById("musica");
 const overlay = document.getElementById("overlay");
 const btnEntrar = document.getElementById("btn-entrar");
 const bola = document.getElementById("bola-disco");
 const videos = document.querySelectorAll("video");
-
 let iniciado = false;
-let ctx, analyser, data;
 
-// 🔥 LUCES AL BEAT
-function lucesBeat() {
-  analyser.getByteFrequencyData(data);
-  const intensidad = data.reduce((a, b) => a + b) / data.length;
-
-  document.body.style.boxShadow =
-    `inset 0 0 ${intensidad}px rgba(255,0,255,0.8)`;
-
-  if (intensidad > 120) {
-    document.body.classList.add("flash");
-    setTimeout(() => document.body.classList.remove("flash"), 150);
-    if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
-  }
-
-  requestAnimationFrame(lucesBeat);
-}
-
-// ✅ INICIAR FIESTA (iOS SAFE)
 function iniciarFiesta() {
   if (iniciado) return;
   iniciado = true;
 
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const source = ctx.createMediaElementSource(musica);
-  analyser = ctx.createAnalyser();
-  source.connect(analyser);
-  analyser.connect(ctx.destination);
-  analyser.fftSize = 256;
-  data = new Uint8Array(analyser.frequencyBinCount);
+  // AudioContext para efectos visuales
+  if (window.AudioContext || window.webkitAudioContext) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = ctx.createMediaElementSource(musica);
+    const analyser = ctx.createAnalyser();
+    source.connect(analyser);
+    analyser.connect(ctx.destination);
+    analyser.fftSize = 256;
+    const data = new Uint8Array(analyser.frequencyBinCount);
 
-  musica.play();
+    function lucesBeat() {
+      analyser.getByteFrequencyData(data);
+      const intensidad = data.reduce((a,b)=>a+b)/data.length;
+
+      document.body.style.boxShadow = `inset 0 0 ${intensidad}px rgba(255,0,255,0.8)`;
+
+      if (intensidad > 120) {
+        document.body.classList.add("flash");
+        setTimeout(()=>document.body.classList.remove("flash"),150);
+        if (navigator.vibrate) navigator.vibrate([50,30,50]);
+      }
+
+      requestAnimationFrame(lucesBeat);
+    }
+
+    ctx.resume().then(()=>lucesBeat());
+  }
+
+  // Reproducción de música
+  musica.play().catch(e => {
+    console.log("Error al reproducir música:", e);
+  });
+
   overlay.style.display = "none";
   document.body.classList.add("rave");
   bola.style.opacity = 1;
-
-  lucesBeat();
 }
 
-// 🎯 EVENTOS DE USUARIO
-overlay.addEventListener("click", iniciarFiesta);
+// Eventos de usuario para iPhone y PC
 btnEntrar.addEventListener("click", iniciarFiesta);
+overlay.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("touchstart", iniciarFiesta);
 
-// 🎬 CONTROL MUSICA VS VIDEOS
+/* 🎬 CONTROL MUSICA vs VIDEOS */
 videos.forEach(video => {
   video.addEventListener("play", () => {
     videos.forEach(v => { if (v !== video) v.pause(); });
