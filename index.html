@@ -110,22 +110,22 @@ function iniciarFiesta() {
     ctx.resume().then(()=>lucesBeat());
   }
 
-  // Reproducción de música
-  musica.play().catch(e => {
-    console.log("Error al reproducir música:", e);
-  });
+  // Reproducir música directo del toque
+  musica.play().catch(e => console.log("Error al reproducir música:", e));
 
   overlay.style.display = "none";
   document.body.classList.add("rave");
   bola.style.opacity = 1;
 }
 
-// Eventos de usuario para iPhone y PC
-btnEntrar.addEventListener("click", iniciarFiesta);
-overlay.addEventListener("click", iniciarFiesta);
-overlay.addEventListener("touchstart", iniciarFiesta);
+// 🔹 Eventos de usuario: click o toque en cualquier parte de la pantalla
+document.addEventListener("click", iniciarFiesta, { once: true });
+document.addEventListener("touchstart", iniciarFiesta, { once: true });
 
-/* 🎬 CONTROL MUSICA vs VIDEOS */
+// Botón Entrar para compatibilidad
+btnEntrar.addEventListener("click", iniciarFiesta);
+
+// 🎬 CONTROL MUSICA vs VIDEOS
 videos.forEach(video => {
   video.addEventListener("play", () => {
     videos.forEach(v => { if (v !== video) v.pause(); });
