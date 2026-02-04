@@ -12,6 +12,7 @@
 <!-- 🔥 OVERLAY -->
 <div id="overlay">
   <h1>🎉 Toca para entrar a la fiesta 🎉</h1>
+  <button id="btn-entrar">Entrar 🍹</button>
 </div>
 
 <!-- 🪩 BOLA DISCO -->
@@ -25,7 +26,7 @@
 <header class="hero neon">
     <h1>🎉 Fiesta en la casa de Alexa 🎉</h1>
     <img src="Img/alexa.jpeg" alt="Fiesta principal">
-    <p>Música, diversión y buena vibra toda la noche</p>
+    <p>Música, diversión y buena vibra toda la noche y romo 🍹🥃</p>
 </header>
 
 <section class="galeria reveal">
@@ -42,73 +43,23 @@
     <h2>Loqueras</h2>
     <div class="videos-grid">
 
-        <video src="Vid/vi1.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw1.png"></video>
-
-        <video src="Vid/vi2.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw2.png"></video>
-
-        <video src="Vid/vi3.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw3.png"></video>
-
-        <video src="Vid/vi4.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw4.png"></video>
-
-        <video src="Vid/vi5.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw5.png"></video>
-
-        <video src="Vid/vi6.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw6.png"></video>
-
-        <video src="Vid/vi7.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw7.png"></video>
-
-        <video src="Vid/vi8.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw8.png"></video>
-
-        <video src="Vid/vi9.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw9.png"></video>
-
-        <video src="Vid/vi10.mp4"
-               controls
-               playsinline
-               preload="metadata"
-               poster="Prewie/pw10.png"></video>
+        <video src="Vid/vi1.mp4" controls playsinline preload="metadata" poster="Prewie/pw1.png"></video>
+        <video src="Vid/vi2.mp4" controls playsinline preload="metadata" poster="Prewie/pw2.png"></video>
+        <video src="Vid/vi3.mp4" controls playsinline preload="metadata" poster="Prewie/pw3.png"></video>
+        <video src="Vid/vi4.mp4" controls playsinline preload="metadata" poster="Prewie/pw4.png"></video>
+        <video src="Vid/vi5.mp4" controls playsinline preload="metadata" poster="Prewie/pw5.png"></video>
+        <video src="Vid/vi6.mp4" controls playsinline preload="metadata" poster="Prewie/pw6.png"></video>
+        <video src="Vid/vi7.mp4" controls playsinline preload="metadata" poster="Prewie/pw7.png"></video>
+        <video src="Vid/vi8.mp4" controls playsinline preload="metadata" poster="Prewie/pw8.png"></video>
+        <video src="Vid/vi9.mp4" controls playsinline preload="metadata" poster="Prewie/pw9.png"></video>
+        <video src="Vid/vi10.mp4" controls playsinline preload="metadata" poster="Prewie/pw10.png"></video>
 
     </div>
 </section>
 
-
 <section class="info reveal neon">
     <h2>¿Te lo vas a perder mmg?</h2>
-    <p>Una noche de locura, música y mucho romo 🔥</p>
+    <p>Una noche de locura, música y mucho romo 🍹🔥</p>
     <a class="boton disco" href="https://chat.whatsapp.com/LQS7OA4UcDqF4uhW4xHiRY?mode=gi_t" target="_blank">
         Asistir 🎉
     </a>
@@ -122,6 +73,7 @@
 <script>
 const musica = document.getElementById("musica");
 const overlay = document.getElementById("overlay");
+const btnEntrar = document.getElementById("btn-entrar");
 const bola = document.getElementById("bola-disco");
 const videos = document.querySelectorAll("video");
 let iniciado = false;
@@ -164,8 +116,8 @@ function iniciarFiesta() {
 }
 
 overlay.addEventListener("click", iniciarFiesta);
+btnEntrar.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("touchstart", iniciarFiesta);
-document.addEventListener("pointerdown", iniciarFiesta, { once: true });
 
 /* 🎬 CONTROL MUSICA vs VIDEOS */
 videos.forEach(video => {

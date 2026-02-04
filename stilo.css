@@ -141,3 +141,34 @@ body.flash{
     from{transform:rotate(0deg)}
     to{transform:rotate(360deg)}
 }
+/* BOTON OVERLAY (ENTRAR A LA FIESTA) */
+#btn-entrar{
+    margin-top:25px;
+    padding:16px 55px;
+    font-size:1.2rem;
+    font-weight:700;
+    border:none;
+    border-radius:60px;
+    cursor:pointer;
+    color:#fff;
+    background:linear-gradient(90deg,#ff0080,#00ffff,#ff0080);
+    background-size:300%;
+    animation:btnDisco 2.5s infinite, pulso 1.5s infinite;
+    box-shadow:0 0 20px #ff00ff, 0 0 40px #00ffff;
+}
+
+/* EFECTO PULSO */
+@keyframes pulso{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.1)}
+    100%{transform:scale(1)}
+}
+
+/* MOBILE FRIENDLY */
+@media(max-width:600px){
+    #btn-entrar{
+        padding:14px 45px;
+        font-size:1.1rem;
+    }
+}
+
