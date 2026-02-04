@@ -1,0 +1,74 @@
+<!-- =======================
+ARCHIVO: index.html
+======================= -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiesta en la casa de Alexa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stilo.css">
+</head>
+<body>
+
+<!-- 🎶 MUSICA AUTOMATICA -->
+<audio autoplay loop>
+    <source src="music/fiesta.mp3" type="audio/mpeg">
+</audio>
+
+<header class="hero neon">
+    <h1>🎉 Fiesta en la casa de Alexa 🎉</h1>
+    <img src="Img/party.jpeg" alt="Fiesta principal">
+    <p>Música, diversión y buena vibra toda la noche</p>
+</header>
+
+<section class="galeria reveal">
+    <h2>Momentos</h2>
+
+    <div class="imagenes">
+        <img src="Img/ami1.jpeg">
+        <img src="Img/ami2.jpeg">
+        <img src="Img/ami3.jpeg">
+        <img src="Img/ami4.jpeg">
+    </div>
+</section>
+
+<section class="videos reveal">
+    <h2>Loqueras</h2>
+    <div class="videos-grid">
+        <video src="Vid/vi1.mp4" controls></video>
+        <video src="Vid/vi2.mp4" controls></video>
+        <video src="Vid/vi3.mp4" controls></video>
+        <video src="Vid/vi4.mp4" controls></video>
+        <video src="Vid/vi5.mp4" controls></video>
+        <video src="Vid/vi6.mp4" controls></video>
+        <video src="Vid/vi7.mp4" controls></video>
+        <video src="Vid/vi8.mp4" controls></video>
+        <video src="Vid/vi9.mp4" controls></video>
+        <video src="Vid/vi10.mp4" controls></video>
+    </div>
+</section>
+
+<section class="info reveal neon">
+    <h2>¿Te lo vas a perder mmg?</h2>
+    <p>Una noche de locura, música y vibra pesada 🔥</p>
+    <a class="boton disco" href="https://chat.whatsapp.com/XXXXXXXXXXX" target="_blank">Asistir 🎉</a>
+</section>
+
+<footer>
+    © 2026 | Evento Privado
+</footer>
+
+<script>
+// ✨ EFECTO SCROLL
+const reveals = document.querySelectorAll('.reveal');
+window.addEventListener('scroll', () => {
+  reveals.forEach(r => {
+    const top = r.getBoundingClientRect().top;
+    if (top < window.innerHeight - 100) r.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
