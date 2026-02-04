@@ -9,6 +9,26 @@ ARCHIVO: index.html
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="stilo.css">
 </head>
+<script>
+const musica = document.getElementById("musica");
+let iniciada = false;
+
+function iniciarMusica() {
+    if (!iniciada) {
+        musica.play().catch(() => {});
+        iniciada = true;
+        window.removeEventListener("scroll", iniciarMusica);
+        window.removeEventListener("click", iniciarMusica);
+        window.removeEventListener("touchstart", iniciarMusica);
+    }
+}
+
+// Escucha cualquier interacción válida
+window.addEventListener("scroll", iniciarMusica, { once: true });
+window.addEventListener("click", iniciarMusica, { once: true });
+window.addEventListener("touchstart", iniciarMusica, { once: true });
+</script>
+
 <body>
 
 <!-- 🎶 MUSICA AUTOMATICA -->
