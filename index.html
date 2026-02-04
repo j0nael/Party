@@ -1,6 +1,3 @@
-<!-- =======================
-ARCHIVO: index.html
-======================= -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,30 +6,20 @@ ARCHIVO: index.html
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="stilo.css">
 </head>
-<script>
-const musica = document.getElementById("musica");
-let iniciada = false;
-
-function iniciarMusica() {
-    if (!iniciada) {
-        musica.play().catch(() => {});
-        iniciada = true;
-        window.removeEventListener("scroll", iniciarMusica);
-        window.removeEventListener("click", iniciarMusica);
-        window.removeEventListener("touchstart", iniciarMusica);
-    }
-}
-
-// Escucha cualquier interacción válida
-window.addEventListener("scroll", iniciarMusica, { once: true });
-window.addEventListener("click", iniciarMusica, { once: true });
-window.addEventListener("touchstart", iniciarMusica, { once: true });
-</script>
 
 <body>
 
-<!-- 🎶 MUSICA AUTOMATICA -->
-<audio autoplay loop>
+<!-- 🔥 OVERLAY -->
+<div id="overlay">
+  <h1>🎉 Toca para entrar a la fiesta 🎉</h1>
+  <p>Activa la música y el modo rave</p>
+</div>
+
+<!-- 🪩 BOLA DISCO -->
+<div id="bola-disco"></div>
+
+<!-- 🎶 MUSICA -->
+<audio id="musica" loop>
     <source src="Audio/corre grea correElCherryScomRD.mp3" type="audio/mpeg">
 </audio>
 
@@ -44,7 +31,6 @@ window.addEventListener("touchstart", iniciarMusica, { once: true });
 
 <section class="galeria reveal">
     <h2>Momentos</h2>
-
     <div class="imagenes">
         <img src="Img/ami1.jpeg">
         <img src="Img/ami2.jpeg">
@@ -72,15 +58,83 @@ window.addEventListener("touchstart", iniciarMusica, { once: true });
 <section class="info reveal neon">
     <h2>¿Te lo vas a perder mmg?</h2>
     <p>Una noche de locura, música y vibra pesada 🔥</p>
-    <a class="boton disco" href="https://chat.whatsapp.com/LQS7OA4UcDqF4uhW4xHiRY?mode=gi_t" target="_blank">Asistir 🎉</a>
+    <a class="boton disco" href="https://chat.whatsapp.com/LQS7OA4UcDqF4uhW4xHiRY?mode=gi_t" target="_blank">
+        Asistir 🎉
+    </a>
 </section>
 
 <footer>
     © 2026 | Evento Privado
 </footer>
 
+<!-- 🎧 MODO DISCOTECA TOTAL -->
 <script>
-// ✨ EFECTO SCROLL
+const musica = document.getElementById("musica");
+const overlay = document.getElementById("overlay");
+const bola = document.getElementById("bola-disco");
+const videos = document.querySelectorAll("video");
+let iniciado = false;
+
+// 🎵 Audio API
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const source = ctx.createMediaElementSource(musica);
+const analyser = ctx.createAnalyser();
+source.connect(analyser);
+analyser.connect(ctx.destination);
+analyser.fftSize = 256;
+const data = new Uint8Array(analyser.frequencyBinCount);
+
+function lucesBeat() {
+  analyser.getByteFrequencyData(data);
+  const intensidad = data.reduce((a, b) => a + b) / data.length;
+
+  document.body.style.boxShadow =
+    `inset 0 0 ${intensidad}px rgba(255,0,255,0.8)`;
+
+  if (intensidad > 120) {
+    document.body.classList.add("flash");
+    setTimeout(()=>document.body.classList.remove("flash"),150);
+    if (navigator.vibrate) navigator.vibrate([50,30,50]);
+  }
+
+  requestAnimationFrame(lucesBeat);
+}
+
+function iniciarFiesta() {
+  if (iniciado) return;
+  iniciado = true;
+
+  ctx.resume();
+  musica.play();
+  overlay.style.display = "none";
+  document.body.classList.add("rave");
+  bola.style.opacity = 1;
+  lucesBeat();
+}
+
+overlay.addEventListener("click", iniciarFiesta);
+overlay.addEventListener("touchstart", iniciarFiesta);
+document.addEventListener("pointerdown", iniciarFiesta, { once: true });
+
+/* 🎬 CONTROL MUSICA vs VIDEOS */
+videos.forEach(video => {
+  video.addEventListener("play", () => {
+    videos.forEach(v => { if (v !== video) v.pause(); });
+    if (!musica.paused) musica.pause();
+  });
+
+  video.addEventListener("pause", () => {
+    if (iniciado && musica.paused) musica.play();
+  });
+
+  video.addEventListener("ended", () => {
+    if (iniciado) musica.play();
+  });
+});
+</script>
+
+<!-- ✨ EFECTO SCROLL -->
+<script>
 const reveals = document.querySelectorAll('.reveal');
 window.addEventListener('scroll', () => {
   reveals.forEach(r => {
