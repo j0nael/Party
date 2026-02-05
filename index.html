@@ -77,20 +77,20 @@ const btnEntrar = document.getElementById("btn-entrar");
 const bola = document.getElementById("bola-disco");
 const videos = document.querySelectorAll("video");
 
-let iniciado = true;
+let iniciado = false;
 
-// 🎵 AUDIO compatible móvil
+// 🎵 AUDIO (compatible móvil)
 const musica = new Audio("Audio/corre grea correElCherryScomRD.mp3");
 musica.loop = true;
 
-// 🎧 AudioContext (ritmo)
+// 🎧 AudioContext + ritmo
 let ctx, analyser, source, data;
 
 function iniciarFiesta() {
   if (iniciado) return;
   iniciado = true;
 
-  // 🔊 Crear AudioContext SOLO tras interacción del usuario
+  // 🔥 Crear AudioContext SOLO tras interacción del usuario
   ctx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = ctx.createAnalyser();
   analyser.fftSize = 256;
@@ -102,7 +102,7 @@ function iniciarFiesta() {
 
   ctx.resume();
 
-  // ▶️ Reproducir música (100% móvil)
+  // ▶️ Reproducir música (iPhone seguro)
   musica.play().catch(err => console.log(err));
 
   overlay.style.display = "none";
@@ -112,13 +112,14 @@ function iniciarFiesta() {
   lucesBeat();
 }
 
-// 💡 Ritmo de la canción
+// 💡 LUCES AL RITMO REAL
 function lucesBeat() {
   analyser.getByteFrequencyData(data);
-  const intensidad = data.reduce((a, b) => a + b) / data.length;
+
+  const intensidad = data.reduce((a, b) => a + b, 0) / data.length;
 
   document.body.style.boxShadow =
-    `inset 0 0 ${intensidad}px rgba(255,0,255,0.85)`;
+    `inset 0 0 ${intensidad}px rgba(255, 0, 255, 0.85)`;
 
   if (intensidad > 120) {
     document.body.classList.add("flash");
@@ -129,7 +130,7 @@ function lucesBeat() {
   requestAnimationFrame(lucesBeat);
 }
 
-// 🖱️📱 Eventos seguros (PC + móviles)
+// 🖱️📱 Eventos seguros
 btnEntrar.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("touchstart", iniciarFiesta);
