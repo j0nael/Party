@@ -79,25 +79,57 @@ const videos = document.querySelectorAll("video");
 
 let iniciado = false;
 
-// 🎵 AUDIO (método más compatible para móviles)
+// 🎵 AUDIO compatible móvil
 const musica = new Audio("Audio/corre grea correElCherryScomRD.mp3");
 musica.loop = true;
+
+// 🎧 AudioContext (ritmo)
+let ctx, analyser, source, data;
 
 function iniciarFiesta() {
   if (iniciado) return;
   iniciado = true;
 
-  // ▶️ Reproducir música (seguro en iPhone)
-  musica.play().catch(err => {
-    console.log("No se pudo reproducir el audio:", err);
-  });
+  // 🔊 Crear AudioContext SOLO tras interacción del usuario
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = ctx.createAnalyser();
+  analyser.fftSize = 256;
+  data = new Uint8Array(analyser.frequencyBinCount);
+
+  source = ctx.createMediaElementSource(musica);
+  source.connect(analyser);
+  analyser.connect(ctx.destination);
+
+  ctx.resume();
+
+  // ▶️ Reproducir música (100% móvil)
+  musica.play().catch(err => console.log(err));
 
   overlay.style.display = "none";
   document.body.classList.add("rave");
   bola.style.opacity = 1;
+
+  lucesBeat();
 }
 
-// 🔹 Eventos de usuario (PC + móviles)
+// 💡 Ritmo de la canción
+function lucesBeat() {
+  analyser.getByteFrequencyData(data);
+  const intensidad = data.reduce((a, b) => a + b) / data.length;
+
+  document.body.style.boxShadow =
+    `inset 0 0 ${intensidad}px rgba(255,0,255,0.85)`;
+
+  if (intensidad > 120) {
+    document.body.classList.add("flash");
+    setTimeout(() => document.body.classList.remove("flash"), 120);
+    if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+  }
+
+  requestAnimationFrame(lucesBeat);
+}
+
+// 🖱️📱 Eventos seguros (PC + móviles)
 btnEntrar.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("touchstart", iniciarFiesta);
@@ -118,7 +150,6 @@ videos.forEach(video => {
   });
 });
 </script>
-
 
 
 <!-- ✨ EFECTO SCROLL -->
