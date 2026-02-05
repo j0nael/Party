@@ -72,69 +72,45 @@
 
 <!-- 🎧 MODO DISCOTECA TOTAL -->
 <script>
-const musica = document.getElementById("musica");
 const overlay = document.getElementById("overlay");
 const btnEntrar = document.getElementById("btn-entrar");
 const bola = document.getElementById("bola-disco");
 const videos = document.querySelectorAll("video");
+
 let iniciado = false;
+
+// 🎵 AUDIO (método más compatible para móviles)
+const musica = new Audio("Audio/corre grea correElCherryScomRD.mp3");
+musica.loop = true;
 
 function iniciarFiesta() {
   if (iniciado) return;
   iniciado = true;
 
-  // AudioContext para efectos visuales
-  if (window.AudioContext || window.webkitAudioContext) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const source = ctx.createMediaElementSource(musica);
-    const analyser = ctx.createAnalyser();
-    source.connect(analyser);
-    analyser.connect(ctx.destination);
-    analyser.fftSize = 256;
-    const data = new Uint8Array(analyser.frequencyBinCount);
-
-    function lucesBeat() {
-      analyser.getByteFrequencyData(data);
-      const intensidad = data.reduce((a,b)=>a+b)/data.length;
-
-      document.body.style.boxShadow = `inset 0 0 ${intensidad}px rgba(255,0,255,0.8)`;
-
-      if (intensidad > 120) {
-        document.body.classList.add("flash");
-        setTimeout(()=>document.body.classList.remove("flash"),150);
-        if (navigator.vibrate) navigator.vibrate([50,30,50]);
-      }
-
-      requestAnimationFrame(lucesBeat);
-    }
-
-    ctx.resume().then(()=>lucesBeat());
-  }
-
-  // Reproducir música directo del toque
-  musica.play().catch(e => console.log("Error al reproducir música:", e));
+  // ▶️ Reproducir música (seguro en iPhone)
+  musica.play().catch(err => {
+    console.log("No se pudo reproducir el audio:", err);
+  });
 
   overlay.style.display = "none";
   document.body.classList.add("rave");
   bola.style.opacity = 1;
 }
 
-// 🔹 Eventos de usuario: click o toque en cualquier parte de la pantalla
-document.addEventListener("click", iniciarFiesta, { once: true });
-document.addEventListener("touchstart", iniciarFiesta, { once: true });
-
-// Botón Entrar para compatibilidad
+// 🔹 Eventos de usuario (PC + móviles)
 btnEntrar.addEventListener("click", iniciarFiesta);
+overlay.addEventListener("click", iniciarFiesta);
+overlay.addEventListener("touchstart", iniciarFiesta);
 
 // 🎬 CONTROL MUSICA vs VIDEOS
 videos.forEach(video => {
   video.addEventListener("play", () => {
     videos.forEach(v => { if (v !== video) v.pause(); });
-    if (!musica.paused) musica.pause();
+    musica.pause();
   });
 
   video.addEventListener("pause", () => {
-    if (iniciado && musica.paused) musica.play();
+    if (iniciado) musica.play();
   });
 
   video.addEventListener("ended", () => {
@@ -142,6 +118,8 @@ videos.forEach(video => {
   });
 });
 </script>
+
+
 
 <!-- ✨ EFECTO SCROLL -->
 <script>
