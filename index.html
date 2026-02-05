@@ -75,82 +75,91 @@
 const overlay = document.getElementById("overlay");
 const btnEntrar = document.getElementById("btn-entrar");
 const bola = document.getElementById("bola-disco");
-const videos = document.querySelectorAll("video");
+const audio = document.getElementById("musica");
 
 let iniciado = false;
-
-// 🎵 AUDIO (compatible móvil)
-const musica = new Audio("Audio/corre grea correElCherryScomRD.mp3");
-musica.loop = true;
-
-// 🎧 AudioContext + ritmo
-let ctx, analyser, source, data;
+let audioContext, analyser, source, dataArray;
 
 function iniciarFiesta() {
   if (iniciado) return;
   iniciado = true;
 
-  // 🔥 Crear AudioContext SOLO tras interacción del usuario
-  ctx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = ctx.createAnalyser();
-  analyser.fftSize = 256;
-  data = new Uint8Array(analyser.frequencyBinCount);
+  // 🔓 Despertar audio en iOS
+  audio.play().then(() => {
+    audio.pause();
+    audio.currentTime = 0;
 
-  source = ctx.createMediaElementSource(musica);
-  source.connect(analyser);
-  analyser.connect(ctx.destination);
+    // 🎧 Crear AudioContext SOLO tras interacción
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    source = audioContext.createMediaElementSource(audio);
 
-  ctx.resume();
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
 
-  // ▶️ Reproducir música (iPhone seguro)
-  musica.play().catch(err => console.log(err));
+    analyser.fftSize = 256;
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    audio.play();
+    animarLuces();
+  }).catch(err => {
+    console.log("Audio bloqueado:", err);
+  });
 
   overlay.style.display = "none";
   document.body.classList.add("rave");
   bola.style.opacity = 1;
-
-  lucesBeat();
 }
 
-// 💡 LUCES AL RITMO REAL
-function lucesBeat() {
-  analyser.getByteFrequencyData(data);
+// 🎨 Luces al ritmo
+function animarLuces() {
+  analyser.getByteFrequencyData(dataArray);
+  const energia = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
 
-  const intensidad = data.reduce((a, b) => a + b, 0) / data.length;
+  bola.style.boxShadow = `
+    0 0 ${energia / 2}px red,
+    0 0 ${energia}px cyan,
+    0 0 ${energia * 1.5}px lime
+  `;
 
-  document.body.style.boxShadow =
-    `inset 0 0 ${intensidad}px rgba(255, 0, 255, 0.85)`;
-
-  if (intensidad > 120) {
-    document.body.classList.add("flash");
-    setTimeout(() => document.body.classList.remove("flash"), 120);
-    if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
-  }
-
-  requestAnimationFrame(lucesBeat);
+  requestAnimationFrame(animarLuces);
 }
 
-// 🖱️📱 Eventos seguros
+// 📱 Eventos compatibles iPhone
 btnEntrar.addEventListener("click", iniciarFiesta);
+btnEntrar.addEventListener("touchstart", iniciarFiesta);
 overlay.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("touchstart", iniciarFiesta);
+</script>
+<script>
+const videos = document.querySelectorAll("video");
 
-// 🎬 CONTROL MUSICA vs VIDEOS
 videos.forEach(video => {
+
+  // ⏸️ Pausar música al reproducir video
   video.addEventListener("play", () => {
-    videos.forEach(v => { if (v !== video) v.pause(); });
-    musica.pause();
+    if (!audio.paused) {
+      audio.pause();
+    }
   });
 
+  // ▶️ Reanudar música al pausar video
   video.addEventListener("pause", () => {
-    if (iniciado) musica.play();
+    if (iniciado) {
+      audio.play().catch(()=>{});
+    }
   });
 
+  // 🔁 Reanudar música al terminar video
   video.addEventListener("ended", () => {
-    if (iniciado) musica.play();
+    if (iniciado) {
+      audio.play().catch(()=>{});
+    }
   });
+
 });
 </script>
+
 
 
 <!-- ✨ EFECTO SCROLL -->
