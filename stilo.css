@@ -31,11 +31,7 @@ body{
     box-shadow:0 0 40px #ff0080;
 }
 
-@keyframes discoBg{
-    0%{background:#000}
-    50%{background:#1a0033}
-    100%{background:#000}
-}
+
 
 /* GALERIA */
 .galeria,.videos,.info{padding:70px 20px;text-align:center}
@@ -105,17 +101,12 @@ body.rave{
 }
 
 @keyframes fondoRave{
-    0%{background:#ff005d}
-    25%{background:#00eaff}
-    50%{background:#8cff00}
-    75%{background:#ffae00}
-    100%{background:#ff00ff}
+   0%{background:#000}
+    50%{background:#1a0033}
+    100%{background:#000}
 }
 
-/* FLASH */
-body.flash{
-    animation:flashBeat .15s alternate 2;
-}
+
 
 @keyframes flashBeat{
     from{filter:brightness(1)}

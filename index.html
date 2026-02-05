@@ -116,14 +116,32 @@ function animarLuces() {
   analyser.getByteFrequencyData(dataArray);
   const energia = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
 
+  // 🎚️ Limitar intensidad (más suave)
+  const glow = Math.min(energia / 2, 60);
+
+  // 🪩 BOLA DISCO
   bola.style.boxShadow = `
-    0 0 ${energia / 2}px red,
-    0 0 ${energia}px cyan,
-    0 0 ${energia * 1.5}px lime
+    0 0 ${glow}px rgba(0,255,255,0.8),
+    0 0 ${glow * 1.5}px rgba(255,0,255,0.6)
   `;
+
+  // 🖼️ IMÁGENES
+  document.querySelectorAll('.imagenes img').forEach(img => {
+    img.style.boxShadow = `
+      0 0 ${glow / 1.5}px rgba(0,255,255,0.6)
+    `;
+  });
+
+  // 🎬 VIDEOS
+  document.querySelectorAll('video').forEach(video => {
+    video.style.boxShadow = `
+      0 0 ${glow / 1.5}px rgba(255,0,255,0.6)
+    `;
+  });
 
   requestAnimationFrame(animarLuces);
 }
+
 
 // 📱 Eventos compatibles iPhone
 btnEntrar.addEventListener("click", iniciarFiesta);
