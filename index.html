@@ -72,29 +72,20 @@
 
 <!-- 🎧 MODO DISCOTECA TOTAL -->
 <script>
-const overlay = document.getElementById("overlay");
-const btnEntrar = document.getElementById("btn-entrar");
-const bola = document.getElementById("bola-disco");
-const audio = document.getElementById("musica");
-
-let iniciado = false;
-let audioContext, analyser, source, dataArray;
-
-function iniciarFiesta() {
-
-  function detectOS() {
+/* 🖥️ DETECTAR SISTEMA OPERATIVO */
+function detectOS() {
   const userAgent = window.navigator.userAgent;
   const platform = window.navigator.platform;
   const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
   const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
   const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
-  let os = null;
+  let os = 'Desconocido';
 
-  if (macosPlatforms.indexOf(platform) !== -1) {
+  if (macosPlatforms.includes(platform)) {
     os = 'Mac OS';
-  } else if (iosPlatforms.indexOf(platform) !== -1) {
+  } else if (iosPlatforms.includes(platform)) {
     os = 'iOS';
-  } else if (windowsPlatforms.indexOf(platform) !== -1) {
+  } else if (windowsPlatforms.includes(platform)) {
     os = 'Windows';
   } else if (/Android/.test(userAgent)) {
     os = 'Android';
@@ -105,10 +96,19 @@ function iniciarFiesta() {
   return os;
 }
 
-// Usage
 const userOS = detectOS();
-console.log('User OS:', userOS);
+console.log('🖥️ Sistema operativo:', userOS);
 
+/* 🎧 MODO DISCOTECA TOTAL */
+const overlay = document.getElementById("overlay");
+const btnEntrar = document.getElementById("btn-entrar");
+const bola = document.getElementById("bola-disco");
+const audio = document.getElementById("musica");
+
+let iniciado = false;
+let audioContext, analyser, source, dataArray;
+
+function iniciarFiesta() {
   if (iniciado) return;
   iniciado = true;
 
@@ -117,7 +117,6 @@ console.log('User OS:', userOS);
     audio.pause();
     audio.currentTime = 0;
 
-    // 🎧 Crear AudioContext SOLO tras interacción
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
     source = audioContext.createMediaElementSource(audio);
@@ -139,44 +138,38 @@ console.log('User OS:', userOS);
   bola.style.opacity = 1;
 }
 
-// 🎨 Luces al ritmo
+/* 🎨 Luces SOLO en bola, imágenes y videos */
 function animarLuces() {
   analyser.getByteFrequencyData(dataArray);
   const energia = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-
-  // 🎚️ Limitar intensidad (más suave)
   const glow = Math.min(energia / 2, 60);
 
-  // 🪩 BOLA DISCO
+  // 🪩 Bola
   bola.style.boxShadow = `
     0 0 ${glow}px rgba(0,255,255,0.8),
-    0 0 ${glow * 1.5}px rgba(255,0,255,0.6)
+    0 0 ${glow * 1.4}px rgba(255,0,255,0.6)
   `;
 
-  // 🖼️ IMÁGENES
+  // 🖼️ Imágenes
   document.querySelectorAll('.imagenes img').forEach(img => {
-    img.style.boxShadow = `
-      0 0 ${glow / 1.5}px rgba(0,255,255,0.6)
-    `;
+    img.style.boxShadow = `0 0 ${glow / 1.5}px rgba(0,255,255,0.6)`;
   });
 
-  // 🎬 VIDEOS
+  // 🎬 Videos
   document.querySelectorAll('video').forEach(video => {
-    video.style.boxShadow = `
-      0 0 ${glow / 1.5}px rgba(255,0,255,0.6)
-    `;
+    video.style.boxShadow = `0 0 ${glow / 1.5}px rgba(255,0,255,0.6)`;
   });
 
   requestAnimationFrame(animarLuces);
 }
 
-
-// 📱 Eventos compatibles iPhone
+/* 📱 Eventos */
 btnEntrar.addEventListener("click", iniciarFiesta);
 btnEntrar.addEventListener("touchstart", iniciarFiesta);
 overlay.addEventListener("click", iniciarFiesta);
 overlay.addEventListener("touchstart", iniciarFiesta);
 </script>
+
 <script>
 const videos = document.querySelectorAll("video");
 
