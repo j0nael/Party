@@ -2,10 +2,34 @@
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 
+:root{
+    color-scheme:dark;
+    --bg:#08010f;
+    --bg-2:#140026;
+    --card:#0f0b1f;
+    --primary:#ff00a8;
+    --secondary:#14d9ff;
+    --text:#f5f4ff;
+    --muted:#c1b8d9;
+}
+
 body{
-    background:radial-gradient(circle at top,#1a0033,#000);
-    color:#fff;
+    background:radial-gradient(circle at top,var(--bg-2),var(--bg));
+    color:var(--text);
     overflow-x:hidden;
+    min-height:100vh;
+    line-height:1.6;
+}
+
+.page{
+    display:flex;
+    flex-direction:column;
+    gap:80px;
+    padding-bottom:80px;
+}
+
+img,video{
+    display:block;
 }
 
 /* NEON */
@@ -21,20 +45,56 @@ body{
     align-items:center;
     justify-content:center;
     text-align:center;
-    animation:discoBg 5s infinite alternate;
+    padding:120px 24px 80px;
+    gap:16px;
+    background:linear-gradient(145deg,rgba(255,0,168,0.08),rgba(20,217,255,0.05));
 }
 
 .hero img{
-    width:280px;
-    border-radius:30px;
-    margin:30px 0;
-    box-shadow:0 0 40px #ff0080;
+    width:min(320px,80vw);
+    border-radius:28px;
+    margin:24px 0;
+    box-shadow:0 20px 45px rgba(255,0,128,.4);
+    border:1px solid rgba(255,255,255,0.12);
 }
 
+.eyebrow{
+    text-transform:uppercase;
+    letter-spacing:4px;
+    font-size:0.85rem;
+    color:var(--secondary);
+}
 
+.fecha{
+    font-size:1.05rem;
+    color:var(--muted);
+}
+
+.intro{
+    max-width:560px;
+    color:var(--muted);
+}
+
+section{
+    width:min(1100px,92vw);
+    margin:0 auto;
+}
 
 /* GALERIA */
 .galeria,.videos,.info{padding:70px 20px;text-align:center}
+
+.section-header{
+    margin-bottom:32px;
+}
+
+.section-header h2{
+    font-size:2rem;
+    margin-bottom:8px;
+}
+
+.section-header p{
+    color:var(--muted);
+}
 
 .imagenes,.videos-grid{
     display:grid;
@@ -44,12 +104,16 @@ body{
 
 img,video{
     width:100%;
-    border-radius:25px;
-    box-shadow:0 0 30px rgba(255,0,150,.6);
-    transition:.4s;
+    border-radius:22px;
+    box-shadow:0 15px 35px rgba(255,0,150,.25);
+    transition:transform .35s ease, box-shadow .35s ease;
+    border:1px solid rgba(255,255,255,0.12);
 }
 
-img:hover,video:hover{transform:scale(1.08)}
+img:hover,video:hover{
+    transform:translateY(-6px) scale(1.02);
+    box-shadow:0 22px 55px rgba(20,217,255,.25);
+}
 
 /* BOTON DISCO */
 .boton{
@@ -63,6 +127,7 @@ img:hover,video:hover{transform:scale(1.08)}
     text-decoration:none;
     font-size:1.3rem;
     animation:btnDisco 3s infinite;
+    box-shadow:0 12px 30px rgba(255,0,128,.35);
 }
 
 @keyframes btnDisco{
@@ -88,6 +153,12 @@ footer{padding:20px;opacity:.6;text-align:center}
     z-index:9999;
     cursor:pointer;
     animation:overlayGlow 2s infinite alternate;
+    text-align:center;
+    padding:0 24px;
+}
+
+#overlay h1{
+    font-size:clamp(1.6rem,3.5vw,2.6rem);
 }
 
 @keyframes overlayGlow{
@@ -157,9 +228,16 @@ body.rave{
 
 /* MOBILE FRIENDLY */
 @media(max-width:600px){
+    .hero{
+        padding-top:110px;
+    }
+
+    .section-header h2{
+        font-size:1.6rem;
+    }
+
     #btn-entrar{
         padding:14px 45px;
         font-size:1.1rem;
     }
 }
-
